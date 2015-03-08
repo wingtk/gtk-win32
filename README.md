@@ -130,6 +130,7 @@ If you want to build the bundle from source yourself, we have a PowerShell scrip
     * [NASM](http://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D) (extract to _C:\mozilla-build\nasm_)
     * [msgfmt](https://dl.hexchat.net/gtk-win32/msgfmt-0.18.1.7z) (extract to _C:\mozilla-build_)
     * [Ragel](https://dl.hexchat.net/gtk-win32/ragel-6.8.7z) (extract to _C:\mozilla-build_)
+    * [Python 2.7](https://www.python.org/ftp/python/2.7.9/python-2.7.9.amd64.msi) (install in C:\Python27)
 
 1. Clone [this repository](https://github.com/hexchat/gtk-win32) repository to _C:\mozilla-build\hexchat\github\gtk-win32_ This repository contains the build script, project files and patches.
 
