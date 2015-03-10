@@ -38,6 +38,10 @@ The directory where you checked out https://github.com/nice-software/gtk-win32.g
 The directory where you installed Visual Studio.
 
 
+.PARAMETER VSVer
+Visual Studio version 10,12, etc
+
+
 .PARAMETER Patch
 The path to a patch.exe binary.
 
@@ -78,6 +82,9 @@ Custom paths. x86 build.
 build.ps1 -OnlyBuild libpng
 Only builds libpng and its dependencies (zlib).
 
+.EXAMPLE
+.\build.ps1 -VSVer 10 -VSInstallPath 'C:\Program Files (x86)\Microsoft Visual Studio 10.0' -OnlyBuild gtk3
+Builds gtk3 and its dependencies using VS2010
 
 .LINK
 http://hexchat.github.io/gtk-win32/
@@ -111,6 +118,9 @@ param (
 
 	[string]
 	$VSInstallPath = 'C:\Program Files (x86)\Microsoft Visual Studio 12.0',
+
+	[string]
+	$VSVer = '12',
 
 	[string]
 	$Patch = "$Msys2Directory\usr\bin\patch.exe",
@@ -169,7 +179,7 @@ $items['atk'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vs12\atk.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vs$VSVer\atk.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -187,7 +197,7 @@ $items['cairo'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild msvc\vc12\cairo.sln /p:Platform=$platform /p:Configuration=Release_FC /maxcpucount /nodeReuse:True
+	Exec msbuild msvc\vc$VSVer\cairo.sln /p:Platform=$platform /p:Configuration=Release_FC /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -262,6 +272,13 @@ $items['fontconfig'].BuildScript = {
 
 	Exec $Patch -p1 -i fontconfig.patch
 
+	#make the fontconfig files work on other compatible vs versions
+	Get-ChildItem "$PWD" -Filter *.vcxproj | `
+	Foreach-Object{
+		$file = $_.FullName
+		(Get-Content $file | ForEach-Object { $_ -replace "<PlatformToolset>FIXME</PlatformToolset>", "<PlatformToolset>v${VSVer}0</PlatformToolset>" } ) | Set-Content $file
+	}
+
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
 	Exec msbuild fontconfig.sln /p:Platform=$platform /p:Configuration=Release /t:build /nodeReuse:True
@@ -326,7 +343,7 @@ $items['freetype'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild builds\windows\vc2013\freetype.vcxproj /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild builds\windows\vc$VSVer\freetype.vcxproj /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -337,7 +354,7 @@ $items['freetype'].BuildScript = {
 
 	New-Item -Type Directory $packageDestination\lib
 	Copy-Item `
-		".\objs\vc2013\$platform\freetype.lib" `
+		".\objs\$platform\freetype.lib" `
 		$packageDestination\lib
 
 	New-Item -Type Directory $packageDestination\share\doc\freetype
@@ -352,7 +369,7 @@ $items['gdk-pixbuf'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vc12\gdk-pixbuf.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vc$VSVer\gdk-pixbuf.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -401,7 +418,7 @@ $items['glib'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vs12\glib.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vs$VSVer\glib.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -416,6 +433,7 @@ $items['gtk'].BuildScript = {
 	Remove-Item -Recurse $packageDestination -ErrorAction Ignore
 
 	Exec $Patch -p1 -i gtk-revert-scrolldc-commit.patch
+	Exec $Patch -p1 -i gtk-revert-recreatecairosurface-commit.patch
 	Exec $Patch -p1 -i gtk-bgimg.patch
 	Exec $Patch -p1 -i gtk-statusicon.patch
 	Exec $Patch -p1 -i gtk-accel.patch
@@ -455,7 +473,7 @@ $items['gtk3'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vs12\gtk+.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vs$VSVer\gtk+.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -480,6 +498,13 @@ $items['gtk3'].BuildScript = {
 $items['harfbuzz'].BuildScript = {
 	$packageDestination = "$PWD-$filenameArch"
 	Remove-Item -Recurse $packageDestination -ErrorAction Ignore
+
+	#make the fontconfig files work on other compatible vs versions
+	Get-ChildItem "$PWD\win32" -Filter *.vcxproj | `
+	Foreach-Object{
+		$file = $_.FullName
+		(Get-Content $file | ForEach-Object { $_ -replace "<PlatformToolset>FIXME</PlatformToolset>", "<PlatformToolset>v${VSVer}0</PlatformToolset>" } ) | Set-Content $file
+	}
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
@@ -525,7 +550,7 @@ $items['libffi'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vs12\libffi.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vs$VSVer\libffi.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -547,18 +572,18 @@ $items['libpng'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild projects\vc12\pnglibconf\pnglibconf.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\projects\vc12\ /nodeReuse:True
-	Exec msbuild projects\vc12\libpng\libpng.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\projects\vc12\ /nodeReuse:True
+	Exec msbuild projects\vc$VSVer\pnglibconf\pnglibconf.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\projects\vc$VSVer\ /nodeReuse:True
+	Exec msbuild projects\vc$VSVer\libpng\libpng.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\projects\vc$VSVer\ /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
 	switch ($filenameArch) {
 		'x86' {
-			$releaseDirectory = '.\projects\vc12\Release'
+			$releaseDirectory = ".\projects\vc$VSVer\Release"
 		}
 
 		'x64' {
-			$releaseDirectory = '.\projects\vc12\x64\Release'
+			$releaseDirectory = ".\projects\vc$VSVer\x64\Release"
 		}
 	}
 
@@ -593,17 +618,17 @@ $items['libxml2'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild win32\vc12\libxml2.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
+	Exec msbuild win32\vc$VSVer\libxml2.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
 	switch ($filenameArch) {
 		'x86' {
-			$releaseDirectory = '.\win32\vc12\Release'
+			$releaseDirectory = ".\win32\vc$VSVer\Release"
 		}
 
 		'x64' {
-			$releaseDirectory = '.\win32\vc12\x64\Release'
+			$releaseDirectory = ".\win32\vc$VSVer\x64\Release"
 		}
 	}
 
@@ -714,7 +739,7 @@ $items['pango'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vs12\pango.sln /p:Platform=$platform /p:Configuration=Release_FC /nodeReuse:True
+	Exec msbuild build\win32\vs$VSVer\pango.sln /p:Platform=$platform /p:Configuration=Release_FC /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -754,8 +779,8 @@ $items['pixman']['BuildScript'] = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild build\win32\vc12\pixman.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\build\win32\vc12\ /maxcpucount /nodeReuse:True
-	Exec msbuild build\win32\vc12\install.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\build\win32\vc12\ /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vc$VSVer\pixman.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\build\win32\vc$VSVer\ /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vc$VSVer\install.vcxproj /p:Platform=$platform /p:Configuration=Release /p:SolutionDir=$PWD\build\win32\vc$VSVer\ /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
@@ -794,31 +819,26 @@ $items['zlib'].BuildScript = {
 
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
-	Exec msbuild contrib\vstudio\vc12\zlibvc.sln /p:Platform=$platform /p:Configuration=ReleaseWithoutAsm /maxcpucount /nodeReuse:True
+	Exec msbuild build\win32\vs$VSVer\zlib.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
 
 	[void] (Swap-Environment $originalEnvironment)
 
-	New-Item -Type Directory $packageDestination\include
-	Copy-Item zlib.h, zconf.h $packageDestination\include
+	Push-Location ".\build\vs$VSVer\Release\Win32"
 
-	Push-Location ".\contrib\vstudio\vc12\$filenameArch"
+	New-Item -Type Directory $packageDestination\include
+	Copy-Item `
+		.\include\zlib.h, `
+		.\include\zconf.h `
+		$packageDestination\include
 
 	New-Item -Type Directory $packageDestination\bin
 	Copy-Item `
-		.\TestZlibDllRelease\testzlibdll.exe, `
-		.\TestZlibDllRelease\testzlibdll.pdb, `
-		.\TestZlibReleaseWithoutAsm\testzlib.exe, `
-		.\TestZlibReleaseWithoutAsm\testzlib.pdb, `
-		.\ZlibDllReleaseWithoutAsm\zlib1.dll, `
-		.\ZlibDllReleaseWithoutAsm\zlib1.map, `
-		.\ZlibDllReleaseWithoutAsm\zlib1.pdb `
+		.\bin\zlib1.dll, `
+		.\bin\zlib1.pdb  `
 		$packageDestination\bin
 
 	New-Item -Type Directory $packageDestination\lib
-	Copy-Item `
-		.\ZlibDllReleaseWithoutAsm\zlib1.lib, `
-		.\ZlibStatReleaseWithoutAsm\zlibstat.lib `
-		$packageDestination\lib
+	Copy-Item .\lib\zlib1.lib $packageDestination\lib
 
 	Pop-Location
 
@@ -1119,6 +1139,7 @@ while (@($items.GetEnumerator() | ?{ ($_.Value.State -eq 'Pending') -or ($_.Valu
 				$Patch = $using:Patch
 				$platform = $using:platform
 				$VSInstallPath = $using:VSInstallPath
+				$VSVer = $using:VSVer
 				$workingDirectory = $using:workingDirectory
 				$CMakePath = $using:CMakePath
 
