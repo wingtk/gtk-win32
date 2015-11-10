@@ -1,0 +1,88 @@
+From d8aeccb12e28568f2bef91a4df5d3ee3f9f313ac Mon Sep 17 00:00:00 2001
+From: Ignacio Casal Quinteiro <icq@gnome.org>
+Date: Tue, 10 Nov 2015 16:26:31 +0100
+Subject: [PATCH 2/2] Add some debug messages
+
+---
+ tls/openssl/gtlsconnection-openssl.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/tls/openssl/gtlsconnection-openssl.c b/tls/openssl/gtlsconnection-openssl.c
+index 9bac302..b3c35b4 100644
+--- a/tls/openssl/gtlsconnection-openssl.c
++++ b/tls/openssl/gtlsconnection-openssl.c
+@@ -181,6 +181,8 @@ g_tls_connection_openssl_request_rehandshake (GTlsConnectionBase  *tls,
+   SSL *ssl;
+   int ret;
+ 
++  g_debug ("rehandshake start");
++
+   /* On a client-side connection, SSL_renegotiate() itself will start
+    * a rehandshake, so we only need to do something special here for
+    * server-side connections.
+@@ -197,6 +199,8 @@ g_tls_connection_openssl_request_rehandshake (GTlsConnectionBase  *tls,
+   END_OPENSSL_IO (openssl, G_IO_IN | G_IO_OUT, ret, status,
+                   _("Error performing TLS handshake: %s"), error);
+ 
++  g_debug ("rehandshake end: %d", status);
++
+   return status;
+ }
+ 
+@@ -284,6 +288,8 @@ g_tls_connection_openssl_handshake (GTlsConnectionBase  *tls,
+   SSL *ssl;
+   int ret;
+ 
++  g_debug ("handshake start");
++
+   priv = g_tls_connection_openssl_get_instance_private (openssl);
+ 
+   ssl = g_tls_connection_openssl_get_ssl (openssl);
+@@ -305,6 +311,8 @@ g_tls_connection_openssl_handshake (GTlsConnectionBase  *tls,
+         }
+     }
+ 
++  g_debug ("handshake end: %d", status);
++
+   return status;
+ }
+ 
+@@ -318,6 +326,8 @@ g_tls_connection_openssl_complete_handshake (GTlsConnectionBase  *tls,
+   GTlsCertificateFlags peer_certificate_errors = 0;
+   GTlsConnectionBaseStatus status = G_TLS_CONNECTION_BASE_OK;
+ 
++  g_debug ("complete handshake start");
++
+   priv = g_tls_connection_openssl_get_instance_private (openssl);
+ 
+   peer_certificate = priv->peer_certificate_tmp;
+@@ -340,6 +350,8 @@ g_tls_connection_openssl_complete_handshake (GTlsConnectionBase  *tls,
+                                                   peer_certificate_errors);
+     }
+ 
++  g_debug ("complete handshake end: %d", status);
++
+   return status;
+ }
+ 
+@@ -458,6 +470,8 @@ g_tls_connection_openssl_close (GTlsConnectionBase  *tls,
+   SSL *ssl;
+   int ret;
+ 
++  g_debug ("close start");
++
+   ssl = g_tls_connection_openssl_get_ssl (openssl);
+   priv = g_tls_connection_openssl_get_instance_private (openssl);
+ 
+@@ -468,6 +482,8 @@ g_tls_connection_openssl_close (GTlsConnectionBase  *tls,
+   END_OPENSSL_IO (openssl, G_IO_IN | G_IO_OUT, ret, status,
+                   _("Error performing TLS close: %s"), error);
+ 
++  g_debug ("close end: %d", status);
++
+   return status;
+ }
+ 
+-- 
+2.5.0
+

@@ -1,0 +1,65 @@
+From c2f643e4ee766cab34f50db5280ac274b4941522 Mon Sep 17 00:00:00 2001
+From: Ignacio Casal Quinteiro <icq@gnome.org>
+Date: Tue, 10 Nov 2015 16:21:46 +0100
+Subject: [PATCH 1/2] Add some debug info
+
+---
+ tls/openssl/gtlsbio.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/tls/openssl/gtlsbio.c b/tls/openssl/gtlsbio.c
+index 09baa8a..c96fab1 100644
+--- a/tls/openssl/gtlsbio.c
++++ b/tls/openssl/gtlsbio.c
+@@ -115,6 +115,7 @@ gtls_bio_write (BIO        *bio,
+                 int         inl)
+ {
+   GTlsBio *gbio;
++  gssize written;
+ 
+   if (bio->init == 0 || in == NULL || inl == 0)
+     return 0;
+@@ -126,6 +127,13 @@ gtls_bio_write (BIO        *bio,
+                                   gbio->write_blocking,
+                                   gbio->write_cancellable,
+                                   gbio->write_error);
++
++  if (written == -1)
++    {
++      g_debug ("There was a problem writing: %s", (*gbio->write_error)->message);
++    }
++
++  return written;
+ }
+ 
+ static int
+@@ -134,17 +142,25 @@ gtls_bio_read (BIO  *bio,
+                int   outl)
+ {
+   GTlsBio *gbio;
++  gssize read;
+ 
+   if (bio->init == 0 || out == NULL || outl == 0)
+     return 0;
+ 
+   gbio = (GTlsBio *)bio->ptr;
+ 
+-  return g_pollable_stream_read (g_io_stream_get_input_stream (gbio->io_stream),
++  read = g_pollable_stream_read (g_io_stream_get_input_stream (gbio->io_stream),
+                                  out, outl,
+                                  gbio->read_blocking,
+                                  gbio->read_cancellable,
+                                  gbio->read_error);
++
++  if (read == -1)
++    {
++      g_debug ("There was a problem reading: %s", (*gbio->read_error)->message);
++    }
++
++  return read;
+ }
+ 
+ static int
+-- 
+2.5.0
+

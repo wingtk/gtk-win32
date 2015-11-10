@@ -1008,6 +1008,9 @@ $items['glib-networking'].BuildScript = {
 	$packageDestination = "$PWD-rel"
 	Remove-Item -Recurse $packageDestination -ErrorAction Ignore
 
+	Exec $patch -p1 -i 0001-Add-some-debug-info.patch
+	Exec $patch -p1 -i 0002-Add-some-debug-messages.patch
+
 	$originalEnvironment = Swap-Environment $vcvarsEnvironment
 
 	Exec msbuild build\win32\vs$VSVer\glib-networking.sln /p:Platform=$platform /p:Configuration=Release /maxcpucount /nodeReuse:True
