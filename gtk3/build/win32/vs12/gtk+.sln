@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil-3", "gailutil-3.vc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-install", "gtk3-install.vcxproj", "{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-update-icon-cache", "gtk-update-icon-cache.vcxproj", "{02459374-C6F6-44A1-920C-8ECA4701B38B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -220,6 +222,22 @@ Global
 		{F280BF1A-777A-4FB5-8005-DFBE04621EDB}.Release_Broadway|Win32.Build.0 = Release|Win32
 		{F280BF1A-777A-4FB5-8005-DFBE04621EDB}.Release_Broadway|x64.ActiveCfg = Release|x64
 		{F280BF1A-777A-4FB5-8005-DFBE04621EDB}.Release_Broadway|x64.Build.0 = Release|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug|Win32.Build.0 = Debug|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug|x64.ActiveCfg = Debug|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug|x64.Build.0 = Debug|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release|Win32.ActiveCfg = Release|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release|Win32.Build.0 = Release|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release|x64.ActiveCfg = Release|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release|x64.Build.0 = Release|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug_Broadway|Win32.ActiveCfg = Debug_Broadway|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug_Broadway|Win32.Build.0 = Debug_Broadway|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug_Broadway|x64.ActiveCfg = Debug_Broadway|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Debug_Broadway|x64.Build.0 = Debug_Broadway|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release_Broadway|Win32.ActiveCfg = Release_Broadway|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release_Broadway|Win32.Build.0 = Release_Broadway|Win32
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release_Broadway|x64.ActiveCfg = Release_Broadway|x64
+		{02459374-C6F6-44A1-920C-8ECA4701B38B}.Release_Broadway|x64.Build.0 = Release_Broadway|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

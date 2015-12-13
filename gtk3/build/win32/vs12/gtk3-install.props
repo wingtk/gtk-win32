@@ -6,7 +6,7 @@
   <PropertyGroup Label="UserMacros">
     <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
     <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gailutil(GtkDllSuffix).dll</InstalledDlls>
-    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe;$(BinDir)\gtk3-icon-browser.exe;$(BinDir)\gtk-encode-symbolic-svg.exe</InstalledBins>
+    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe;$(BinDir)\gtk3-icon-browser.exe;$(BinDir)\gtk-encode-symbolic-svg.exe;$(BinDir)\gtk3-icon-browser.exe;$(BinDir)\gtk-update-icon-cache-svg.exe</InstalledBins>
     <InstalledBroadwayBins>$(BinDir)\broadwayd.exe</InstalledBroadwayBins>
     <GtkDoInstallBin>
 mkdir $(CopyDir)\bin
@@ -30,6 +30,8 @@ copy "$(BinDir)\gtk3-icon-browser.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk3-icon-browser.pdb" $(CopyDir)\bin
 copy "$(BinDir)\gtk-encode-symbolic-svg.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk-encode-symbolic-svg.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.pdb" $(CopyDir)\bin
 goto DONE_BIN
 :DO_BROADWAY_BIN
 copy "$(BinDir)\broadwayd.exe" $(CopyDir)\bin
@@ -51,6 +53,8 @@ copy .\Release\$(Platform)\bin\gtk3-icon-browser.exe $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-update-icon-cache.exe" $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-update-icon-cache.pdb" $(CopyDir)\bin
 goto DONE_BIN
 :DO_BROADWAY_DEBUG
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-3$(GtkDllSuffix).dll $(CopyDir)\bin
@@ -67,6 +71,8 @@ copy .\Debug\$(Platform)\bin\gtk3-icon-browser.exe $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-update-icon-cache.exe" $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-update-icon-cache.pdb" $(CopyDir)\bin
 :DONE_BIN
     </GtkDoInstallBin>
     <GtkDoInstall>
