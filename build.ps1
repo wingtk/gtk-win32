@@ -125,6 +125,7 @@ param (
 	$PerlDirectory = "C:\perl",
 
 	[string[]][ValidateSet(
+		'adwaita-icon-theme',
 		'atk',
 		'cairo',
 		'cyrus-sasl',
@@ -168,6 +169,11 @@ param (
 #========================================================================================================================================================
 
 $items = @{
+	'adwaita-icon-theme' = @{
+		'ArchiveUrl' = 'http://ftp.acc.umu.se/pub/GNOME/sources/adwaita-icon-theme/3.18/adwaita-icon-theme-3.18.0.tar.xz'
+		'Dependencies' = @()
+	};
+
 	'atk' = @{
 		'ArchiveUrl' = 'http://ftp.acc.umu.se/pub/GNOME/sources/atk/2.18/atk-2.18.0.tar.xz'
 		'Dependencies' = @('glib')
@@ -326,6 +332,17 @@ $items = @{
 #========================================================================================================================================================
 # Build steps begin here
 #========================================================================================================================================================
+
+$items['adwaita-icon-theme'].BuildScript = {
+	$packageDestination = "$PWD-rel"
+	Remove-Item -Recurse $packageDestination -ErrorAction Ignore
+
+	New-Item -Type Directory $packageDestination\share\icons
+	Copy-Item -Recurse .\Adwaita $packageDestination\share\icons
+	Copy-Item .\index.theme $packageDestination\share\icons\Adwaita
+
+	Package $packageDestination
+}
 
 $items['atk'].BuildScript = {
 	$packageDestination = "$PWD-rel"
