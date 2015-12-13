@@ -241,7 +241,7 @@ $items = @{
 
 	'gtk3' = @{
 		'ArchiveUrl' = 'http://ftp.acc.umu.se/pub/GNOME/sources/gtk+/3.18/gtk+-3.18.5.tar.xz';
-		'Dependencies' = @('atk', 'gdk-pixbuf', 'pango', 'libepoxy')
+		'Dependencies' = @('atk', 'gdk-pixbuf', 'pango', 'libepoxy', 'hicolor-icon-theme', 'adwaita-icon-theme')
 	};
 
 	'harfbuzz' = @{
@@ -728,6 +728,9 @@ $items['gtk3'].BuildScript = {
 	Copy-Item .\COPYING $packageDestination\share\doc\gtk
 
 	Package $packageDestination
+
+	Exec $packageDestination\..\..\..\gtk\$platform\bin\gtk-update-icon-cache.exe -f -t "$packageDestination\..\..\..\gtk\$platform\share\icons\hicolor"
+	Exec $packageDestination\..\..\..\gtk\$platform\bin\gtk-update-icon-cache.exe -f -t "$packageDestination\..\..\..\gtk\$platform\share\icons\Adwaita"
 }
 
 $items['harfbuzz'].BuildScript = {
