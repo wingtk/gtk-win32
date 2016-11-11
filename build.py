@@ -1194,11 +1194,13 @@ class Project_openssl(Tarball, Project):
 
 Project.add(Project_openssl())
 
-class Project_opus(Tarball, Project):
+class Project_opus(GitRepo, Project):
     def __init__(self):
         Project.__init__(self,
             'opus',
-            archive_url = 'http://downloads.xiph.org/releases/opus/opus-1.1.3.tar.gz',
+            repo_url = 'https://github.com/xiph/opus.git',
+            fetch_submodules = False,
+            tag = 'ab148485dab4c8a66866d02852940bcdac19851d',
             )
 
     def build(self):
