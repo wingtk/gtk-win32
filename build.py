@@ -826,14 +826,14 @@ class Project_libgxps(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libgxps',
-            archive_url = 'https://git.gnome.org/browse/libgxps/snapshot/libgxps-4709da90210839ca8fdd424caa7be897f3be91bb.tar.xz',
-            dependencies = ['glib', 'libarchive', 'cairo', 'libpng'],
+            archive_url = 'https://git.gnome.org/browse/libgxps/snapshot/libgxps-8f04b292c0e551e2ba8dba2c77012699e40685c7.tar.xz',
+            dependencies = ['glib', 'libarchive', 'cairo', 'libpng', 'libjpeg-turbo'],
             )
 
     def build(self):
         self.push_location(r'.\nmake')
-        self.exec_vs(r'nmake /nologo /f Makefile.vc CFG=%(configuration)s PREFIX="%(gtk_dir)s" LIBPNG=1 CAIRO_PDF=1 CAIRO_PS=1 CAIRO_SVG=1')
-        self.exec_vs(r'nmake /nologo /f Makefile.vc install CFG=%(configuration)s PREFIX="%(gtk_dir)s" LIBPNG=1 CAIRO_PDF=1 CAIRO_PS=1 CAIRO_SVG=1')
+        self.exec_vs(r'nmake /nologo /f Makefile.vc CFG=%(configuration)s PREFIX="%(gtk_dir)s" LIBPNG=1 LIBJPEG=1 CAIRO_PDF=1 CAIRO_PS=1 CAIRO_SVG=1')
+        self.exec_vs(r'nmake /nologo /f Makefile.vc install CFG=%(configuration)s PREFIX="%(gtk_dir)s" LIBPNG=1 LIBJPEG=1 CAIRO_PDF=1 CAIRO_PS=1 CAIRO_SVG=1')
         self.pop_location()
 
         self.install(r'.\COPYING share\doc\libgxps')
