@@ -550,8 +550,8 @@ class Project_gdk_pixbuf(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'gdk-pixbuf',
-            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.4.tar.xz',
-            hash = '0b19901c3eb0596141d2d48ddb9dac79ad1524bdf59366af58ab38fcb9ee7463',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.5.tar.xz',
+            hash = '7ace06170291a1f21771552768bace072ecdea9bd4a02f7658939b9a314c40fc',
             dependencies = ['glib', 'libpng'],
             )
 
@@ -560,7 +560,7 @@ class Project_gdk_pixbuf(Tarball, Project):
         if self.builder.opts.configuration == 'debug':
             configuration = 'Debug_GDI+'
 
-        self.exec_msbuild(r'build\win32\vs%(vs_ver)s\gdk-pixbuf.sln', configuration=configuration)
+        self.exec_msbuild(r'win32\vs%(vs_ver)s\gdk-pixbuf.sln', configuration=configuration)
         self.install(r'.\COPYING share\doc\gdk-pixbuf')
 
 Project.add(Project_gdk_pixbuf())
