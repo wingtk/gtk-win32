@@ -1537,6 +1537,22 @@ class Project_protobuf_c(Tarball, Project):
 
 Project.add(Project_protobuf_c())
 
+class Project_recipes(GitRepo, Meson):
+    def __init__(self):
+        Meson.__init__(self,
+            'recipes',
+            repo_url = 'git://git.gnome.org/recipes',
+            fetch_submodules = False,
+            tag = None,
+            dependencies = ['ninja', 'meson', 'pkg-config', 'gtk3'],
+            )
+
+    def build(self):
+        Meson.build(self)
+        self.install(r'.\COPYING share\doc\recipes')
+
+Project.add(Project_recipes())
+
 class Project_win_iconv(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
