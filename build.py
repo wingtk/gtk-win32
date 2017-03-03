@@ -224,7 +224,7 @@ class Meson(Project):
             # build the ninja file to do everything (build the library, create the .pc file, install it, ...)
             self.exec_vs(cmd, add_path=add_path)
         # we simply run 'ninja install' that takes care of everything, running explicity from the build dir
-        self.builder.exec_vs('ninja install', add_path=self.builder.ninja_path, working_dir=ninja_build)
+        self.builder.exec_vs('ninja -d keeprsp install', add_path=self.builder.ninja_path, working_dir=ninja_build)
 
 #==============================================================================
 # Tools used to build the various projects
@@ -814,6 +814,25 @@ class Project_gtk3(Project_gtk_base):
         self.exec_cmd(r'%(gtk_dir)s\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "%(gtk_dir)s\share\icons\hicolor"')
 
 Project.add(Project_gtk3())
+
+class Project_gtk4(Project_gtk_base):
+    def __init__(self):
+        Project_gtk_base.__init__(self,
+            'gtk4',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/gtk+/3.89/gtk+-3.89.4.tar.xz',
+            dependencies = ['atk', 'gdk-pixbuf', 'pango', 'libepoxy', 'graphene'],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'win32\vs%(vs_ver)s\gtk+-4.sln /p:GtkPostInstall=rem')
+
+        super(Project_gtk4, self).build()
+
+    def post_install(self):
+        self.exec_cmd(r'%(gtk_dir)s\bin\glib-compile-schemas.exe %(gtk_dir)s\share\glib-2.0\schemas')
+        self.exec_cmd(r'%(gtk_dir)s\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "%(gtk_dir)s\share\icons\hicolor"')
+
+Project.add(Project_gtk4())
 
 class Project_gtksourceview3(Tarball, Project):
     def __init__(self):
@@ -1565,8 +1584,7 @@ class Project_wing(Tarball, Meson):
     def __init__(self):
         Project.__init__(self,
             'wing',
-            archive_url = 'https://git.gnome.org/browse/wing/snapshot/wing-510fb0b31b34014e02a37424793efb7ae81cf1a9.tar.xz',
-            hash = '71f643f784cd62f29ffe1cb5d1745c68ba946523fbff0a417da9ae29fd8c73af',
+            archive_url = 'https://git.gnome.org/browse/wing/snapshot/wing-e47980b6cc93e3c5b1e6cca4ff7751cee7d38091.tar.xz',
             dependencies = ['ninja', 'meson', 'pkg-config', 'glib'],
             )
 
