@@ -80,6 +80,19 @@ class Project_cairomm(Tarball, Meson):
         )
 
 @project_add
+class Project_glibmm(Tarball, Meson):
+    def __init__(self):
+        Project.__init__(self,
+            'glibmm',
+            archive_url = 'https://download.gnome.org/sources/glibmm/2.54/glibmm-2.54.1.tar.xz',
+            hash = '7cc28c732b04d70ed34f0c923543129083cfb90580ea4a2b4be5b38802bf6a4a',
+            dependencies = [ 
+                'libsig++', 
+                'glib', 
+            ],
+        )
+
+@project_add
 class Project_pangomm(Tarball, Meson):
     def __init__(self):
         Project.__init__(self,
@@ -90,19 +103,7 @@ class Project_pangomm(Tarball, Meson):
                 'libsig++', 
                 'pango', 
                 'cairomm', 
-            ],
-        )
-
-@project_add
-class Project_glibmm(Tarball, Meson):
-    def __init__(self):
-        Project.__init__(self,
-            'glibmm',
-            archive_url = 'https://download.gnome.org/sources/glibmm/2.52/glibmm-2.52.0.tar.xz',
-            hash = '81b8abf21c645868c06779abc5f34efc1a51d5e61589dab2a2ed67faa8d4811e',
-            dependencies = [ 
-                'libsig++', 
-                'glib', 
+                'glibmm', 
             ],
         )
 
@@ -125,8 +126,8 @@ class Project_gtkmm(Tarball, Meson):
     def __init__(self):
         Project.__init__(self,
             'gtkmm',
-            archive_url = 'https://download.gnome.org/sources/gtkmm/3.22/gtkmm-3.22.1.tar.xz',
-            hash = '6a0c2cc0894a69b666e688e5e6e93621d7625db5e77fd37551310d75c00896b0',
+            archive_url = 'https://download.gnome.org/sources/gtkmm/3.22/gtkmm-3.22.2.tar.xz',
+            hash = '91afd98a31519536f5f397c2d79696e3d53143b80b75778521ca7b48cb280090',
             dependencies = [ 
                 'libsig++', 
                 'gtk', 
