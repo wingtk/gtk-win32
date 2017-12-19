@@ -710,7 +710,8 @@ class Project_libffi(GitRepo, Meson):
             fetch_submodules = False,
             tag = None,
             dependencies = ['python', 'ninja', 'meson'],
-            patches = ['0001-Fix-build-on-windows.patch'],
+            patches = ['0001-Fix-build-on-windows.patch',
+                       '0004-src-x86-win64.S-Fix-MASM-builds.patch'],
             )
 
     def build(self):

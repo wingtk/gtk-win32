@@ -1,0 +1,42 @@
+From 79f57ae120f1ad323517c28ddf0e612ca1c9c4f8 Mon Sep 17 00:00:00 2001
+From: Chun-wei Fan <fanchunwei@src.gnome.org>
+Date: Wed, 13 May 2015 18:15:12 +0800
+Subject: [PATCH 4/4] src/x86/win64.S: Fix MASM builds
+
+The SHORT annotation gets in the way with x64 Visual Studio builds, please
+see https://github.com/atgreen/libffi/issues/149 for a discussion on this.
+---
+ src/x86/win64.S | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/x86/win64.S b/src/x86/win64.S
+index 687f97c..be649ee 100644
+--- a/src/x86/win64.S
++++ b/src/x86/win64.S
+@@ -170,7 +170,11 @@ ret_uint16$:
+ 	mov	rcx, QWORD PTR RVALUE[rbp]
+ 	movzx   rax, ax
+ 	mov	QWORD PTR [rcx], rax
++#ifdef _MSC_VER
++	jmp	ret_void$
++#else
+ 	jmp	SHORT ret_void$
++#endif
+ 
+ ret_sint16$:
+  	cmp	DWORD PTR CIF_FLAGS[rbp], FFI_TYPE_SINT16
+@@ -179,7 +183,11 @@ ret_sint16$:
+ 	mov	rcx, QWORD PTR RVALUE[rbp]
+ 	movsx   rax, ax
+ 	mov	QWORD PTR [rcx], rax
++#ifdef _MSC_VER
++	jmp	ret_void$
++#else
+ 	jmp	SHORT ret_void$
++#endif
+ 
+ ret_uint32$:
+  	cmp	DWORD PTR CIF_FLAGS[rbp], FFI_TYPE_UINT32
+-- 
+2.3.5.windows.8
+
