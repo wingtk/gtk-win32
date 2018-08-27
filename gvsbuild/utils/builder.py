@@ -300,6 +300,8 @@ class Builder(object):
             proj.patch_dir = os.path.join(self.opts.patches_root_dir, proj.name)
             proj.build_dir = os.path.join(self.working_dir, proj.name)
             proj.dependencies = [Project.get_project(dep) for dep in proj.dependencies]
+            if self.opts.skip_g_i and 'gobject-introspection' in proj.dependencies:
+                proj.dependencies.remove('gobject-introspection')
             proj.dependents = []
             proj.load_defaults(self)
             proj.mark_file_calc()

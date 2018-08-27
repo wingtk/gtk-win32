@@ -60,6 +60,7 @@ def get_options(args):
     opts.clean_built = args.clean_built
     opts.py_egg = args.py_egg
     opts.py_wheel = args.py_wheel
+    opts.skip_g_i = args.skip_g_i
 
     if opts.make_zip and opts.no_deps:
         error_exit('Options --make-zip and --no-deps are not compatible')
@@ -248,6 +249,8 @@ Examples:
                          help="pycairo/pygobject: build also the egg distribution format")
     p_build.add_argument('--py-wheel', default=False, action='store_true',
                          help="pycairo/pygobject: build also the wheel distribution format")
+    p_build.add_argument('--skip-g-i', default=False, action='store_true',
+                         help="Whether to skip the dependency on gobject introspection")
 
     p_build.add_argument('project', nargs='+',
                          help='Project(s) to build.')

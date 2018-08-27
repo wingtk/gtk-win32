@@ -65,12 +65,11 @@ class Project_atk(Tarball, Meson):
                 'pkg-config', 
                 'perl', 
                 'glib',
-                'gobject-introspection',
             ],
             )
 
     def build(self):
-        Meson.build(self, meson_params='-Ddisable_introspection=false -Denable_docs=false', make_tests=True)
+        Meson.build(self, meson_params='-Denable_docs=false ' + '-Ddisable_introspection=true' if self.builder.opts.skip_g_i else '-Ddisable_introspection=false', make_tests=True)
         self.install(r'.\COPYING share\doc\atk')
 
 @project_add
@@ -356,7 +355,6 @@ class Project_gdk_pixbuf(Tarball, Meson):
                 'jasper', 
                 'glib', 
                 'libpng',
-                'gobject-introspection',
             ],
             )
 
@@ -364,7 +362,7 @@ class Project_gdk_pixbuf(Tarball, Meson):
         # We can experiment with a couple of options to give to meson:
         #    -Dbuiltin_loaders=all|windows
         #        Buld the loader inside the library
-        Meson.build(self, meson_params='-Djasper=true -Dnative_windows_loaders=true -Dgir=true -Dman=false')
+        Meson.build(self, meson_params='-Djasper=true -Dnative_windows_loaders=true -Dman=false ' + '-Dgir=false' if self.builder.opts.skip_g_i else '-Dgir=true')
         self.install(r'.\COPYING share\doc\gdk-pixbuf')
 
     def post_install(self):
@@ -1260,7 +1258,6 @@ class Project_pango(Tarball, Meson):
                 'cairo', 
                 'harfbuzz', 
                 'fribidi',
-                'gobject-introspection',
             ],
             patches = [ 
                 '001-ignore-help2man.patch', 
@@ -1268,7 +1265,7 @@ class Project_pango(Tarball, Meson):
             )
 
     def build(self):
-        Meson.build(self, meson_params='-Dgir=true')
+        Meson.build(self, meson_params='-Dgir=false' if self.builder.opts.skip_g_i else '-Dgir=true')
         self.install(r'COPYING share\doc\pango')
 
 @project_add
