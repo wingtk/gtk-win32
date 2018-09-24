@@ -288,7 +288,7 @@ class Project_ffmpeg(Tarball, Project):
             'ffmpeg',
             archive_url = 'http://ffmpeg.org/releases/ffmpeg-4.0.2.tar.xz',
             hash = 'a95c0cc9eb990e94031d2183f2e6e444cc61c99f6f182d1575c433d62afb2f97',
-            dependencies = [ 'yasm', 'x264' ],
+            dependencies = [ 'yasm' ],
         )
 
     def build(self):
@@ -297,13 +297,11 @@ class Project_ffmpeg(Tarball, Project):
 
         self.install(r'.\COPYING.LGPLv2.1 ' \
                      r'.\COPYING.LGPLv3 ' \
-                     r'.\COPYING.GPLv2 ' \
                      r'share\doc\ffmpeg')
 
     def post_install(self):
         self.builder.exec_msys(['mv', 'avcodec.lib', '../lib/'], working_dir=os.path.join(self.builder.gtk_dir, 'bin'))
         self.builder.exec_msys(['mv', 'avutil.lib', '../lib/'], working_dir=os.path.join(self.builder.gtk_dir, 'bin'))
-        self.builder.exec_msys(['mv', 'postproc.lib', '../lib/'], working_dir=os.path.join(self.builder.gtk_dir, 'bin'))
         self.builder.exec_msys(['mv', 'swscale.lib', '../lib/'], working_dir=os.path.join(self.builder.gtk_dir, 'bin'))
 
 @project_add
